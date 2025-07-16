@@ -9,12 +9,17 @@ class Inspeccion extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['area', 'fecha', 'tipo', 'observaciones'];
+    protected $fillable = ['user_id', 'area', 'fecha', 'tipo', 'observaciones'];
 
     // Relación uno a muchos con condiciones
     public function condiciones()
     {
         return $this->hasMany(Condicion::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
 

@@ -7,9 +7,9 @@ use App\Models\Inspeccion;
 
 class InspeccionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $inspecciones = Inspeccion::all();
+        $inspecciones = Inspeccion::where('user_id', $request->user()->id)->get();
         return view('inspecciones.index', compact('inspecciones'));
     }
 
@@ -25,8 +25,9 @@ class InspeccionController extends Controller
             'fecha' => 'required|date',
             'tipo' => 'required|string',
         ]);
-
-        Inspeccion::create($request->all());
+        $data = $request->all();
+        $data['user_id'] = $request->user()->id;
+        Inspeccion::create($data);
 
         return redirect()->route('inspecciones.index')->with('success', 'Inspección registrada correctamente.');
     }
@@ -38,9 +39,9 @@ class InspeccionController extends Controller
     }
 
     // API: Listar inspecciones
-    public function apiIndex()
+    public function apiIndex(Request $request)
     {
-        return Inspeccion::all();
+        return Inspeccion::where('user_id', $request->user()->id)->get();
     }
 
     // API: Detalle de inspección con condiciones
@@ -58,7 +59,17 @@ class InspeccionController extends Controller
             'tipo' => 'required|string',
             'observaciones' => 'nullable|string',
         ]);
-        $inspeccion = Inspeccion::create($request->all());
+        $data = $request->all();
+        $data['user_id'] = $request->user()->id;
+        $inspeccion = Inspeccion::create($data);
         return response()->json($inspeccion, 201);
+    }
+
+    // API: Eliminar inspección
+    public function apiDestroy($id)
+    {
+        $inspeccion = Inspeccion::findOrFail($id);
+        $inspeccion->delete();
+        return response()->json(['message' => 'Inspección eliminada correctamente.']);
     }
 }

@@ -15,6 +15,7 @@ class CreateInspeccionsTable extends Migration
 {
     Schema::create('inspeccions', function (Blueprint $table) {
         $table->id();
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
         $table->string('area');
         $table->date('fecha');
         $table->string('tipo'); // geomecánica, ventilación, etc.

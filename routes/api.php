@@ -23,9 +23,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
 
 // Inspecciones
-Route::get('/inspecciones', [InspeccionController::class, 'apiIndex']);
-Route::get('/inspecciones/{id}', [InspeccionController::class, 'apiShow']);
-Route::post('/inspecciones', [InspeccionController::class, 'apiStore']);
-
-// Condiciones
-Route::post('/condiciones', [CondicionController::class, 'apiStore']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/inspecciones', [InspeccionController::class, 'apiIndex']);
+    Route::get('/inspecciones/{id}', [InspeccionController::class, 'apiShow']);
+    Route::post('/inspecciones', [InspeccionController::class, 'apiStore']);
+    Route::delete('/inspecciones/{id}', [InspeccionController::class, 'apiDestroy']);
+    Route::post('/condiciones', [CondicionController::class, 'apiStore']);
+});
