@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InspeccionController;
+use App\Http\Controllers\CondicionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +21,11 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
+
+// Inspecciones
+Route::get('/inspecciones', [InspeccionController::class, 'apiIndex']);
+Route::get('/inspecciones/{id}', [InspeccionController::class, 'apiShow']);
+Route::post('/inspecciones', [InspeccionController::class, 'apiStore']);
+
+// Condiciones
+Route::post('/condiciones', [CondicionController::class, 'apiStore']);

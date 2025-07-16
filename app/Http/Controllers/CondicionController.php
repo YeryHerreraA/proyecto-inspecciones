@@ -30,4 +30,27 @@ class CondicionController extends Controller
         return redirect()->route('inspecciones.show', $request->inspeccion_id)
                          ->with('success', 'Condición registrada correctamente.');
     }
+
+    // API: Crear condición
+    public function apiStore(Request $request)
+    {
+        $request->validate([
+            'inspeccion_id' => 'required|exists:inspeccions,id',
+            'tipo' => 'required|string',
+            'categoria' => 'required|string',
+            'descripcion' => 'required|string',
+            'criticidad' => 'required|string',
+            'evidencia' => 'nullable|image|max:2048'
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('evidencia')) {
+            $data['evidencia'] = $request->file('evidencia')->store('evidencias', 'public');
+        }
+
+        $condicion = Condicion::create($data);
+
+        return response()->json($condicion, 201);
+    }
 }

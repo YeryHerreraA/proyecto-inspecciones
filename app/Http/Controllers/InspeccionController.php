@@ -36,4 +36,29 @@ class InspeccionController extends Controller
         $inspeccion = Inspeccion::findOrFail($id);
         return view('inspecciones.show', compact('inspeccion'));
     }
+
+    // API: Listar inspecciones
+    public function apiIndex()
+    {
+        return Inspeccion::all();
+    }
+
+    // API: Detalle de inspección con condiciones
+    public function apiShow($id)
+    {
+        return Inspeccion::with('condiciones')->findOrFail($id);
+    }
+
+    // API: Crear inspección
+    public function apiStore(Request $request)
+    {
+        $request->validate([
+            'area' => 'required|string',
+            'fecha' => 'required|date',
+            'tipo' => 'required|string',
+            'observaciones' => 'nullable|string',
+        ]);
+        $inspeccion = Inspeccion::create($request->all());
+        return response()->json($inspeccion, 201);
+    }
 }
